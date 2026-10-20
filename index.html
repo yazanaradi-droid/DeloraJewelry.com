@@ -8,45 +8,152 @@
 </head>
 <body>
 
-<header>
-  <div class="nav wrap">
-    <a class="logo" href="/">ديلورا <small>Delora</small></a>
-    <nav class="nav-links">
-      <a href="/#shop">المنتجات</a>
-      <a href="https://wa.me/962786833373" target="_blank" rel="noopener">تواصلي معنا</a>
+<div class="announce">توصيل لكل مناطق الأردن &nbsp;·&nbsp; الدفع عند الاستلام أو عبر كليك</div>
+
+<header id="siteHeader">
+  <div class="nav-grid">
+    <nav class="nav-side">
+      <a href="#collections">المجموعات</a>
+      <a href="#shop">المنتجات</a>
+      <a href="#service">الخدمات</a>
     </nav>
-    <div class="nav-right">
-      <button class="cart-btn" id="cartBtn">
-        السلة <span class="cart-count" id="cartCount">0</span>
-      </button>
+    <a class="brand" href="/">
+      <span class="brand-ar">ديلورا</span>
+      <span class="brand-en">Delora</span>
+    </a>
+    <div class="nav-side end">
+      <a href="https://wa.me/962786833373" target="_blank" rel="noopener">تواصلي معنا</a>
+      <button class="cart-btn" id="cartBtn">السلة <span class="cart-count" id="cartCount">0</span></button>
     </div>
   </div>
 </header>
 
-<div class="section-head" id="shop">
-  <div class="eyebrow">مطلي ذهب · ستانلس ستيل</div>
-  <h1 style="font-size:clamp(28px,4vw,40px);">تفاصيل صغيرة، أناقة كبيرة</h1>
-  <p style="color:var(--cream-dim); margin-top:10px;">قطع تُختار بعناية لتكمل لمستك الخاصة كل يوم</p>
-</div>
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-art" aria-hidden="true">
+    <svg viewBox="0 0 400 400">
+      <circle class="st dr" cx="200" cy="244" r="104"/>
+      <circle class="st dr d2" cx="200" cy="244" r="92" opacity=".6"/>
+      <path class="st dr d3" d="M200 62 L246 112 L200 168 L154 112 Z"/>
+      <path class="st dr d4" d="M154 112 H246 M200 62 L178 112 L200 168 L222 112 L200 62"/>
+      <circle class="st dr d4" cx="200" cy="200" r="190" opacity=".25"/>
+    </svg>
+  </div>
+  <div class="hero-copy">
+    <p class="kicker">مجوهرات ديلورا</p>
+    <h1>
+      <span class="line"><span style="--d:.5s">ذهب يحكي</span></span>
+      <span class="line"><span style="--d:.75s">تفاصيلك</span></span>
+    </h1>
+    <a class="link-cta" href="#collections">اكتشفي المجموعة</a>
+  </div>
+  <div class="hero-meta">مطلي ذهب · ستانلس ستيل</div>
+  <div class="scroll-line"></div>
+</section>
 
-<div class="tabs" id="tabs">
-  <button class="tab active" data-cat="الكل">الكل</button>
-  <button class="tab" data-cat="خواتم">خواتم</button>
-  <button class="tab" data-cat="أساور">أساور</button>
-  <button class="tab" data-cat="سلاسل">سلاسل</button>
-  <button class="tab" data-cat="أقراط">أقراط</button>
-</div>
+<!-- ===== COLLECTIONS ===== -->
+<section class="collections" id="collections">
+  <div class="sec-title reveal">
+    <p class="kicker">المجموعات</p>
+    <h2>اختاري ما يشبهك</h2>
+  </div>
+  <div class="tiles">
+    <div class="tile-wrap reveal" data-cat="خواتم" style="--i:0">
+      <div class="tile"><div class="tile-bg"></div>
+        <div class="tile-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="62" r="26"/><circle cx="50" cy="62" r="21" opacity=".5"/><path d="M50 14 L64 29 L50 46 L36 29 Z"/><path d="M36 29 H64"/></svg></div>
+      </div>
+      <div class="tile-cap"><h3>خواتم</h3><span>اكتشفي</span></div>
+    </div>
+    <div class="tile-wrap reveal" data-cat="أساور" style="--i:1">
+      <div class="tile"><div class="tile-bg"></div>
+        <div class="tile-icon"><svg viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="36" ry="24"/><ellipse cx="50" cy="50" rx="29" ry="18" opacity=".6"/><circle cx="50" cy="26" r="2.5"/></svg></div>
+      </div>
+      <div class="tile-cap"><h3>أساور</h3><span>اكتشفي</span></div>
+    </div>
+    <div class="tile-wrap reveal" data-cat="سلاسل" style="--i:2">
+      <div class="tile"><div class="tile-bg"></div>
+        <div class="tile-icon"><svg viewBox="0 0 100 100"><path d="M18 22 C 20 62, 80 62, 82 22"/><path d="M26 22 C 28 54, 72 54, 74 22" opacity=".5"/><path d="M50 59 C 42 66, 42 74, 50 80 C 58 74, 58 66, 50 59 Z"/></svg></div>
+      </div>
+      <div class="tile-cap"><h3>سلاسل</h3><span>اكتشفي</span></div>
+    </div>
+    <div class="tile-wrap reveal" data-cat="أقراط" style="--i:3">
+      <div class="tile"><div class="tile-bg"></div>
+        <div class="tile-icon"><svg viewBox="0 0 100 100"><circle cx="50" cy="22" r="6"/><path d="M50 28 C 36 42, 36 64, 50 78 C 64 64, 64 42, 50 28 Z"/><path d="M50 40 V68" opacity=".5"/></svg></div>
+      </div>
+      <div class="tile-cap"><h3>أقراط</h3><span>اكتشفي</span></div>
+    </div>
+  </div>
+</section>
 
-<div class="grid" id="grid">
-  <div class="empty-state">جارِ تحميل المنتجات...</div>
-</div>
+<!-- ===== SHOP ===== -->
+<section class="shop" id="shop">
+  <div class="sec-title reveal">
+    <p class="kicker">المنتجات</p>
+    <h2>قطع مختارة بعناية</h2>
+  </div>
+  <div class="tabs reveal" id="tabs">
+    <button class="tab active" data-cat="الكل">الكل</button>
+    <button class="tab" data-cat="خواتم">خواتم</button>
+    <button class="tab" data-cat="أساور">أساور</button>
+    <button class="tab" data-cat="سلاسل">سلاسل</button>
+    <button class="tab" data-cat="أقراط">أقراط</button>
+  </div>
+  <div class="grid" id="grid">
+    <div class="empty-state">جارِ تحميل المنتجات...</div>
+  </div>
+</section>
+
+<!-- ===== EDITORIAL ===== -->
+<section class="editorial" id="story">
+  <div class="ed-art" aria-hidden="true">
+    <svg viewBox="0 0 400 400">
+      <g class="ring-spin">
+        <circle class="st" cx="200" cy="200" r="150"/>
+        <circle class="st" cx="200" cy="200" r="120" opacity=".55"/>
+        <circle class="st" cx="200" cy="50" r="5"/>
+        <circle class="st" cx="350" cy="200" r="3"/>
+        <circle class="st" cx="200" cy="350" r="5"/>
+        <circle class="st" cx="50" cy="200" r="3"/>
+      </g>
+      <path class="st" d="M200 140 L236 178 L200 226 L164 178 Z"/>
+      <path class="st" d="M164 178 H236" opacity=".7"/>
+    </svg>
+  </div>
+  <div class="ed-text reveal">
+    <p class="eyebrow">قصتنا</p>
+    <h2>لمسة ذهب<br>لكل يوم</h2>
+    <p>في ديلورا نختار قطعًا من الستانلس ستيل المطلي بالذهب، بتصاميم هادئة تناسب يومك ومناسباتك، وتصل إلى باب بيتك في كل مناطق الأردن.</p>
+    <a class="link-cta" href="#shop">تسوّقي الآن</a>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="services" id="service">
+  <div class="svc reveal" style="--i:0">
+    <svg viewBox="0 0 40 40"><rect x="3" y="12" width="21" height="15" rx="1"/><path d="M24 17h6l5 5v5h-11"/><circle cx="10" cy="30" r="3"/><circle cx="29" cy="30" r="3"/></svg>
+    <h3>توصيل لكل الأردن</h3>
+    <p>نوصّل طلبك إلى أي محافظة أو منطقة داخل الأردن.</p>
+  </div>
+  <div class="svc reveal" style="--i:1">
+    <svg viewBox="0 0 40 40"><rect x="4" y="9" width="32" height="22" rx="2"/><path d="M4 16h32"/><path d="M9 25h8"/></svg>
+    <h3>الدفع كما يناسبك</h3>
+    <p>ادفعي عند الاستلام، أو حوّلي المبلغ عبر خدمة كليك.</p>
+  </div>
+  <div class="svc reveal" style="--i:2">
+    <svg viewBox="0 0 40 40"><path d="M6 33l2-7a14 14 0 1 1 5 5z"/><path d="M15 15c0 6 5 11 11 11l2-3-4-2-2 1c-2-1-4-3-5-5l1-2-2-4z"/></svg>
+    <h3>اسألينا مباشرة</h3>
+    <p>راسلينا عبر واتساب لأي استفسار عن القطع أو الطلب.</p>
+  </div>
+</section>
 
 <!-- cart drawer -->
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer">
   <div class="drawer-head">
-    <h3 style="font-size:20px;">سلتك</h3>
-    <button class="drawer-close" id="drawerClose">✕</button>
+    <h3>سلتك</h3>
+    <button class="drawer-close" id="drawerClose" aria-label="إغلاق">✕</button>
   </div>
   <div class="drawer-items" id="drawerItems"></div>
   <div class="drawer-foot">
@@ -55,11 +162,32 @@
   </div>
 </aside>
 
+<div class="toast" id="toast"></div>
+
+<a class="wa-float" href="https://wa.me/962786833373" target="_blank" rel="noopener" aria-label="واتساب">
+  <svg viewBox="0 0 32 32"><path d="M16 3C9 3 3.4 8.6 3.4 15.5c0 2.5.7 4.8 2 6.8L3 29l6.9-2.3c1.9 1 4 1.6 6.1 1.6 7 0 12.6-5.6 12.6-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.4l-.4-.2-4.1 1.3 1.3-4-.2-.4c-1-1.6-1.5-3.5-1.5-5.5C5.8 9.9 10.4 5.3 16 5.3S26.2 9.9 26.2 15.5 22 25.7 16 25.7zm6.2-8.2c-.3-.2-1.9-1-2.2-1s-.5-.1-.7.1-.8 1-.9 1.2-.3.2-.6.1c-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.2-.3-.3-.6-.4z"/></svg>
+</a>
+
 <footer>
-  <div class="foot-grid">
-    <p>© 2026 Delora Jewelry — مجوهرات مطلية ذهب على ستانلس ستيل، توصيل لجميع مناطق الأردن.</p>
-    <p><a href="https://wa.me/962786833373" target="_blank" rel="noopener">واتساب: 00962 78 683 3373</a></p>
+  <div class="foot-wrap">
+    <div class="foot-brand">
+      <span class="brand-ar">ديلورا</span>
+      <span class="brand-en">Delora Jewelry</span>
+      <p>مجوهرات مطلية بالذهب على ستانلس ستيل، بتوصيل لجميع مناطق الأردن.</p>
+    </div>
+    <div class="foot-col">
+      <h4>تسوّقي</h4>
+      <a href="#collections">المجموعات</a>
+      <a href="#shop">المنتجات</a>
+      <a href="#story">قصتنا</a>
+    </div>
+    <div class="foot-col">
+      <h4>تواصلي معنا</h4>
+      <a href="https://wa.me/962786833373" target="_blank" rel="noopener">واتساب: 00962 78 683 3373</a>
+      <a href="https://www.instagram.com/delora.jewelry/" target="_blank" rel="noopener">إنستغرام @delora.jewelry</a>
+    </div>
   </div>
+  <div class="foot-bottom"><span>© 2026 Delora Jewelry</span><span>الدفع عند الاستلام · كليك</span></div>
 </footer>
 
 <script src="/cart.js"></script>
