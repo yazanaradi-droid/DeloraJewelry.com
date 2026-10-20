@@ -43,12 +43,14 @@ const upload = multer({
 
 app.use(express.json());
 // ملفات الموقع العامة فقط (بدون كشف server.js أو db.json)
-const PUBLIC_FILES = ['index.html', 'checkout.html', 'admin.html', 'style.css', 'main.js', 'cart.js'];
+const PUBLIC_FILES = ['index.html', 'checkout.html', 'admin.html', 'style.css', 'main.js', 'cart.js', 'hero.jpg'];
 app.use('/uploads', express.static(UPLOADS_DIR));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/:file', (req, res, next) => {
   if (PUBLIC_FILES.includes(req.params.file)) {
-    return res.sendFile(path.join(__dirname, req.params.file));
+    return res.sendFile(path.join(__dirname, req.params.file), err => {
+      if (err && !res.headersSent) res.status(404).end();
+    });
   }
   next();
 });
