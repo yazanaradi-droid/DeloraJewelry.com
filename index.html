@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ديلورا | Delora Jewelry</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header>
+  <div class="nav wrap">
+    <a class="logo" href="/">ديلورا <small>Delora</small></a>
+    <nav class="nav-links">
+      <a href="/#shop">المنتجات</a>
+      <a href="https://wa.me/962786833373" target="_blank" rel="noopener">تواصلي معنا</a>
+    </nav>
+    <div class="nav-right">
+      <button class="cart-btn" id="cartBtn">
+        السلة <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="section-head" id="shop">
+  <div class="eyebrow">مطلي ذهب · ستانلس ستيل</div>
+  <h1 style="font-size:clamp(28px,4vw,40px);">تفاصيل صغيرة، أناقة كبيرة</h1>
+  <p style="color:var(--cream-dim); margin-top:10px;">قطع تُختار بعناية لتكمل لمستك الخاصة كل يوم</p>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-cat="الكل">الكل</button>
+  <button class="tab" data-cat="خواتم">خواتم</button>
+  <button class="tab" data-cat="أساور">أساور</button>
+  <button class="tab" data-cat="سلاسل">سلاسل</button>
+  <button class="tab" data-cat="أقراط">أقراط</button>
+</div>
+
+<div class="grid" id="grid">
+  <div class="empty-state">جارِ تحميل المنتجات...</div>
+</div>
+
+<!-- cart drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3 style="font-size:20px;">سلتك</h3>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-foot">
+    <div class="drawer-total"><span>الإجمالي</span><span id="drawerTotal">0.00 د.أ</span></div>
+    <a class="btn btn-primary" href="/checkout.html" style="width:100%;">إتمام الطلب</a>
+  </div>
+</aside>
+
+<footer>
+  <div class="foot-grid">
+    <p>© 2026 Delora Jewelry — مجوهرات مطلية ذهب على ستانلس ستيل، توصيل لجميع مناطق الأردن.</p>
+    <p><a href="https://wa.me/962786833373" target="_blank" rel="noopener">واتساب: 00962 78 683 3373</a></p>
+  </div>
+</footer>
+
+<script src="/cart.js"></script>
+<script src="/main.js"></script>
+</body>
+</html>

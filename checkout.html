@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إتمام الطلب | ديلورا</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  .checkout-wrap{max-width:640px; margin:0 auto; padding:50px 24px 100px;}
+  .co-summary{border:1px solid var(--gold-line); background:var(--panel); padding:20px; margin-bottom:30px; border-radius:18px; box-shadow:var(--shadow);}
+  .co-row{display:flex; justify-content:space-between; padding:8px 0; font-size:14.5px; border-bottom:1px solid rgba(201,138,149,.15);}
+  .co-total{display:flex; justify-content:space-between; padding-top:14px; font-size:18px; font-weight:800;}
+  form{display:flex; flex-direction:column; gap:16px;}
+  label{font-size:13.5px; color:var(--cream-dim); margin-bottom:6px; display:block;}
+  input, textarea{
+    width:100%; background:var(--panel); border:1px solid var(--gold-line); color:var(--cream);
+    padding:12px 14px; border-radius:12px; font-family:inherit; font-size:14.5px;
+  }
+  input:focus, textarea:focus{outline:none; border-color:var(--gold-bright);}
+  .pay-options{display:flex; gap:12px;}
+  .pay-opt{
+    flex:1; border:1px solid var(--gold-line); padding:14px; border-radius:12px; cursor:pointer; text-align:center; font-size:14px;
+  }
+  .pay-opt.active{border-color:var(--gold-bright); background:var(--panel-2); color:var(--gold-bright);}
+  .cliq-box{
+    display:none; background:var(--panel-2); border:1px solid var(--gold-line); padding:14px; font-size:13.5px; color:var(--cream-dim);
+  }
+  .cliq-box.show{display:block;}
+  #successBox{display:none; text-align:center; padding:60px 20px;}
+  #errorMsg{color:var(--danger); font-size:14px; display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav wrap">
+    <a class="logo" href="/">ديلورا <small>Delora</small></a>
+    <nav class="nav-links"><a href="/">رجوع للمتجر</a></nav>
+    <div></div>
+  </div>
+</header>
+
+<div class="checkout-wrap" id="checkoutView">
+  <h2 style="margin-bottom:24px;">إتمام الطلب</h2>
+
+  <div class="co-summary" id="coSummary"></div>
+
+  <form id="checkoutForm">
+    <div>
+      <label>الاسم الكامل</label>
+      <input type="text" name="name" required placeholder="مثال: سارة أحمد">
+    </div>
+    <div>
+      <label>رقم الهاتف</label>
+      <input type="tel" name="phone" required placeholder="07XXXXXXXX">
+    </div>
+    <div>
+      <label>العنوان بالتفصيل</label>
+      <textarea name="address" rows="3" required placeholder="المحافظة، المنطقة، اسم الشارع، أقرب معلم"></textarea>
+    </div>
+    <div>
+      <label>طريقة الدفع</label>
+      <div class="pay-options">
+        <div class="pay-opt active" data-method="cod">الدفع عند الاستلام</div>
+        <div class="pay-opt" data-method="cliq">تحويل كليك (CliQ)</div>
+      </div>
+      <div class="cliq-box" id="cliqBox">
+        حوّلي المبلغ الإجمالي عبر خدمة كليك على الاسم/الرقم الخاص بمتجر ديلورا، وأرفقي رقم العملية أو لقطة التحويل بالملاحظات أدناه. سيتم تأكيد الطلب بعد التحقق من التحويل.
+      </div>
+    </div>
+    <div>
+      <label>ملاحظات (اختياري)</label>
+      <textarea name="notes" rows="2" placeholder="مثال: رقم عملية التحويل، أو تفضيلات التوصيل"></textarea>
+    </div>
+
+    <p id="errorMsg"></p>
+    <button type="submit" class="btn btn-primary" id="submitBtn">تأكيد الطلب</button>
+  </form>
+</div>
+
+<div class="checkout-wrap" id="successBox">
+  <h2 style="color:var(--gold-bright); margin-bottom:16px;">تم استلام طلبك 🎉</h2>
+  <p style="color:var(--cream-dim); margin-bottom:30px;">رقم طلبك: <b id="orderIdText"></b><br>سنتواصل معك قريبًا لتأكيد التفاصيل.</p>
+  <a class="btn btn-primary" id="waConfirm" target="_blank" rel="noopener">تأكيد الطلب عبر واتساب</a>
+  <a class="btn btn-ghost" href="/" style="margin-top:12px; display:inline-flex;">العودة للمتجر</a>
+</div>
+
+<script src="/cart.js"></script>
+<script>
+function renderSummary() {
+  const items = Cart.get();
+  const box = document.getElementById('coSummary');
+  if (!items.length) {
+    box.innerHTML = '<p style="color:var(--cream-dim);">سلتك فارغة. <a href="/" style="color:var(--gold-bright);">تسوقي الآن</a></p>';
+    document.getElementById('submitBtn').disabled = true;
+    return;
+  }
+  box.innerHTML = items.map(i => `
+    <div class="co-row"><span>${i.name} × ${i.qty}</span><span>${(i.price * i.qty).toFixed(2)} د.أ</span></div>
+  `).join('') + `<div class="co-total"><span>الإجمالي</span><span>${Cart.total().toFixed(2)} د.أ</span></div>`;
+}
+renderSummary();
+
+document.querySelectorAll('.pay-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.pay-opt').forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    document.getElementById('cliqBox').classList.toggle('show', opt.dataset.method === 'cliq');
+  });
+});
+
+document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errorEl = document.getElementById('errorMsg');
+  errorEl.style.display = 'none';
+  const items = Cart.get();
+  if (!items.length) return;
+
+  const form = new FormData(e.target);
+  const paymentMethod = document.querySelector('.pay-opt.active').dataset.method;
+  const payload = {
+    customer: {
+      name: form.get('name'),
+      phone: form.get('phone'),
+      address: form.get('address')
+    },
+    items,
+    paymentMethod,
+    notes: form.get('notes')
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'جارِ الإرسال...';
+
+  try {
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'حدث خطأ، حاولي مجددًا');
+
+    // نجاح
+    document.getElementById('checkoutView').style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+    document.getElementById('orderIdText').textContent = data.id;
+
+    const waText = encodeURIComponent(
+      `مرحبًا، أكدت طلبي رقم ${data.id} من ديلورا.\nالإجمالي: ${data.total.toFixed(2)} د.أ\nطريقة الدفع: ${paymentMethod === 'cod' ? 'عند الاستلام' : 'كليك'}`
+    );
+    document.getElementById('waConfirm').href = `https://wa.me/962786833373?text=${waText}`;
+
+    Cart.clear();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'تأكيد الطلب';
+  }
+});
+</script>
+</body>
+</html>

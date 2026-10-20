@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم ديلورا</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+  body{padding-bottom:60px;}
+  .admin-wrap{max-width:1100px; margin:0 auto; padding:40px 24px;}
+  #loginView{max-width:360px; margin:100px auto; text-align:center;}
+  #loginView input{
+    width:100%; background:var(--panel); border:1px solid var(--gold-line); color:var(--cream);
+    padding:12px 14px; border-radius:12px; margin:16px 0; font-size:15px;
+  }
+  #dashView{display:none;}
+  .admin-tabs{display:flex; gap:10px; margin-bottom:26px; border-bottom:1px solid var(--gold-line);}
+  .a-tab{padding:12px 18px; font-size:14.5px; color:var(--cream-dim); border-bottom:2px solid transparent;}
+  .a-tab.active{color:var(--gold-bright); border-color:var(--gold-bright);}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+  table{width:100%; border-collapse:collapse; font-size:14px;}
+  th, td{text-align:right; padding:12px; border-bottom:1px solid rgba(201,138,149,.18);}
+  th{color:var(--gold); font-weight:700; font-size:12.5px; letter-spacing:1px; text-transform:uppercase;}
+  td img{width:44px; height:44px; object-fit:cover; border-radius:12px; background:var(--panel-2);}
+  .row-actions{display:flex; gap:8px;}
+  .row-actions button{padding:6px 12px; font-size:12.5px; border-radius:12px; border:1px solid var(--gold-line); background:none; color:var(--cream);}
+  .row-actions button:hover{border-color:var(--gold-bright); color:var(--gold-bright);}
+  .status-select{background:var(--panel); color:var(--cream); border:1px solid var(--gold-line); padding:6px 8px; border-radius:12px; font-size:13px;}
+
+  /* modal */
+  .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:100; padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel); border:1px solid var(--gold-line); border-radius:22px; box-shadow:0 20px 60px rgba(197,131,143,0.3); width:100%; max-width:480px; padding:28px; max-height:90vh; overflow-y:auto;}
+  .modal h3{margin-bottom:18px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:13px; color:var(--cream-dim); margin-bottom:6px;}
+  .field input, .field select, .field textarea{
+    width:100%; background:var(--panel-2); border:1px solid var(--gold-line); color:var(--cream);
+    padding:10px 12px; border-radius:12px; font-family:inherit; font-size:14px;
+  }
+  .modal-actions{display:flex; gap:10px; margin-top:20px;}
+  #imgPreview{width:80px; height:80px; object-fit:cover; border-radius:12px; margin-bottom:10px; background:var(--panel-2); display:none;}
+  .msg{font-size:13px; margin-top:8px; display:none;}
+  .msg.error{color:var(--danger);}
+  .msg.ok{color:var(--ok);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav wrap">
+    <a class="logo" href="/">ديلورا <small>لوحة التحكم</small></a>
+    <div id="logoutWrap" style="display:none;">
+      <button class="btn btn-ghost" id="logoutBtn">تسجيل خروج</button>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div id="loginView">
+  <h2>تسجيل الدخول</h2>
+  <input type="password" id="passInput" placeholder="كلمة المرور">
+  <button class="btn btn-primary" id="loginBtn" style="width:100%;">دخول</button>
+  <p class="msg error" id="loginError">كلمة المرور غير صحيحة</p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="admin-wrap" id="dashView">
+  <div class="admin-tabs">
+    <div class="a-tab active" data-panel="products">المنتجات</div>
+    <div class="a-tab" data-panel="orders">الطلبات</div>
+  </div>
+
+  <!-- PRODUCTS PANEL -->
+  <div class="panel active" id="products">
+    <div class="toolbar">
+      <h3>كل المنتجات</h3>
+      <button class="btn btn-primary" id="addProductBtn">+ إضافة منتج</button>
+    </div>
+    <table>
+      <thead><tr><th>الصورة</th><th>الاسم</th><th>التصنيف</th><th>السعر</th><th>متوفر</th><th>إجراءات</th></tr></thead>
+      <tbody id="productsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ORDERS PANEL -->
+  <div class="panel" id="orders">
+    <h3 style="margin-bottom:20px;">الطلبات</h3>
+    <table>
+      <thead><tr><th>العميل</th><th>الهاتف</th><th>القطع</th><th>الإجمالي</th><th>الدفع</th><th>الحالة</th></tr></thead>
+      <tbody id="ordersBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">إضافة منتج</h3>
+    <form id="productForm">
+      <input type="hidden" name="id" id="pId">
+      <div class="field">
+        <label>صورة المنتج</label>
+        <img id="imgPreview">
+        <input type="file" name="image" id="pImage" accept="image/*">
+      </div>
+      <div class="field">
+        <label>اسم المنتج</label>
+        <input type="text" name="name" id="pName" required>
+      </div>
+      <div class="field">
+        <label>التصنيف</label>
+        <select name="category" id="pCategory">
+          <option value="خواتم">خواتم</option>
+          <option value="أساور">أساور</option>
+          <option value="سلاسل">سلاسل</option>
+          <option value="أقراط">أقراط</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>السعر (د.أ)</label>
+        <input type="number" step="0.01" min="0" name="price" id="pPrice" required>
+      </div>
+      <div class="field">
+        <label>الوصف</label>
+        <textarea name="description" id="pDescription" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label>الحالة</label>
+        <select name="stock" id="pStock">
+          <option value="true">متوفر</option>
+          <option value="false">غير متوفر</option>
+        </select>
+      </div>
+      <p class="msg error" id="formError"></p>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary" style="flex:1;">حفظ</button>
+        <button type="button" class="btn btn-ghost" id="cancelModal">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+let PRODUCTS = [];
+let ORDERS = [];
+
+async function checkSession() {
+  const res = await fetch('/api/admin/session');
+  const data = await res.json();
+  if (data.isAdmin) showDashboard();
+}
+
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const password = document.getElementById('passInput').value;
+  const res = await fetch('/api/admin/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password })
+  });
+  if (res.ok) showDashboard();
+  else document.getElementById('loginError').style.display = 'block';
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await fetch('/api/admin/logout', { method: 'POST' });
+  location.reload();
+});
+
+function showDashboard() {
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('dashView').style.display = 'block';
+  document.getElementById('logoutWrap').style.display = 'block';
+  loadProducts();
+  loadOrders();
+}
+
+// tabs
+document.querySelectorAll('.a-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.a-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.panel).classList.add('active');
+  });
+});
+
+// ---------- products ----------
+async function loadProducts() {
+  const res = await fetch('/api/products');
+  PRODUCTS = await res.json();
+  const body = document.getElementById('productsBody');
+  body.innerHTML = PRODUCTS.map(p => `
+    <tr>
+      <td>${p.image ? `<img src="${p.image}">` : '—'}</td>
+      <td>${escapeHtml(p.name)}</td>
+      <td>${escapeHtml(p.category)}</td>
+      <td>${p.price.toFixed(2)} د.أ</td>
+      <td>${p.stock === false ? 'غير متوفر' : 'متوفر'}</td>
+      <td class="row-actions">
+        <button onclick="editProduct('${p.id}')">تعديل</button>
+        <button onclick="deleteProduct('${p.id}')">حذف</button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="6">لا توجد منتجات بعد</td></tr>';
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+const modalOverlay = document.getElementById('modalOverlay');
+document.getElementById('addProductBtn').addEventListener('click', () => openModal());
+document.getElementById('cancelModal').addEventListener('click', () => modalOverlay.classList.remove('open'));
+
+function openModal(product) {
+  document.getElementById('formError').style.display = 'none';
+  document.getElementById('productForm').reset();
+  document.getElementById('modalTitle').textContent = product ? 'تعديل المنتج' : 'إضافة منتج';
+  document.getElementById('pId').value = product ? product.id : '';
+  document.getElementById('imgPreview').style.display = 'none';
+  if (product) {
+    document.getElementById('pName').value = product.name;
+    document.getElementById('pCategory').value = product.category;
+    document.getElementById('pPrice').value = product.price;
+    document.getElementById('pDescription').value = product.description || '';
+    document.getElementById('pStock').value = String(product.stock !== false);
+    if (product.image) {
+      document.getElementById('imgPreview').src = product.image;
+      document.getElementById('imgPreview').style.display = 'block';
+    }
+  }
+  modalOverlay.classList.add('open');
+}
+
+function editProduct(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (p) openModal(p);
+}
+
+async function deleteProduct(id) {
+  if (!confirm('متأكدة من حذف هذا المنتج؟')) return;
+  await fetch('/api/products/' + id, { method: 'DELETE' });
+  loadProducts();
+}
+
+document.getElementById('pImage').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    document.getElementById('imgPreview').src = reader.result;
+    document.getElementById('imgPreview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('pId').value;
+  const formData = new FormData(e.target);
+  const errorEl = document.getElementById('formError');
+  errorEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/products' + (id ? '/' + id : ''), {
+      method: id ? 'PUT' : 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'حدث خطأ');
+    modalOverlay.classList.remove('open');
+    loadProducts();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+});
+
+// ---------- orders ----------
+async function loadOrders() {
+  const res = await fetch('/api/orders');
+  ORDERS = await res.json();
+  const body = document.getElementById('ordersBody');
+  body.innerHTML = ORDERS.map(o => `
+    <tr>
+      <td>${escapeHtml(o.customer.name)}<br><small style="color:var(--cream-dim);">${escapeHtml(o.customer.address)}</small></td>
+      <td><a href="https://wa.me/962${o.customer.phone.replace(/^0/, '')}" target="_blank" style="color:var(--gold-bright);">${escapeHtml(o.customer.phone)}</a></td>
+      <td>${o.items.map(i => `${escapeHtml(i.name)} ×${i.qty}`).join('<br>')}</td>
+      <td>${o.total.toFixed(2)} د.أ</td>
+      <td>${o.paymentMethod === 'cod' ? 'عند الاستلام' : 'كليك'}</td>
+      <td>
+        <select class="status-select" onchange="updateStatus('${o.id}', this.value)">
+          ${['قيد المراجعة','مؤكد','تم التوصيل','ملغي'].map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="6">لا توجد طلبات بعد</td></tr>';
+}
+
+async function updateStatus(id, status) {
+  await fetch('/api/orders/' + id + '/status', {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  });
+}
+
+checkSession();
+</script>
+</body>
+</html>
